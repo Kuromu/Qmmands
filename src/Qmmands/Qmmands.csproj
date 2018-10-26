@@ -3,8 +3,9 @@
   <PropertyGroup>
     <VersionPrefix>1.0.3</VersionPrefix>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>7.3</LangVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Authors>Quahu</Authors>
     <Description>An asynchronous .NET Standard command framework.</Description>
     <PackageTags>commands chat-commands chat-bots irc irc-bots discord bots discord-bots chat csharp dotnet</PackageTags>
@@ -14,6 +15,8 @@
     <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="System.Buffers" Version="4.5.0" />
     <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
+    <PackageReference Include="System.Memory" Version="4.5.1" />
   </ItemGroup>
 </Project>

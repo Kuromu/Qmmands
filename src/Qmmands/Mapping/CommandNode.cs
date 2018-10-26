@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Generic;
 
 namespace Qmmands
@@ -27,7 +28,7 @@ namespace Qmmands
 
             foreach (var kvp in _commands)
             {
-                var index = GetSegment(text, kvp.Key, startIndex, false, out var arguments, out _, out var hasWhitespaceSeparator);
+                var index = GetSegment(text.AsSpan(), kvp.Key, startIndex, false, out var arguments, out _, out var hasWhitespaceSeparator);
                 if (index == -1 || !(hasWhitespaceSeparator || string.IsNullOrWhiteSpace(arguments)))
                     continue;
 
@@ -41,7 +42,7 @@ namespace Qmmands
 
             foreach (var kvp in _nodes)
             {
-                var index = GetSegment(text, kvp.Key, startIndex, true, out _, out var hasSeparator, out _);
+                var index = GetSegment(text.AsSpan(), kvp.Key, startIndex, true, out _, out var hasSeparator, out _);
                 if (index == -1 || !hasSeparator)
                     continue;
 
@@ -59,7 +60,7 @@ namespace Qmmands
 
             foreach (var kvp in _modules)
             {
-                var index = GetSegment(text, kvp.Key, startIndex, false, out var arguments, out _, out var hasWhitespaceSeparator);
+                var index = GetSegment(text.AsSpan(), kvp.Key, startIndex, false, out var arguments, out _, out var hasWhitespaceSeparator);
                 if (index == -1 || !(hasWhitespaceSeparator || string.IsNullOrWhiteSpace(arguments)))
                     continue;
 
@@ -73,7 +74,7 @@ namespace Qmmands
 
             foreach (var kvp in _nodes)
             {
-                var index = GetSegment(text, kvp.Key, startIndex, true, out _, out var hasSeparator, out _);
+                var index = GetSegment(text.AsSpan(), kvp.Key, startIndex, true, out _, out var hasSeparator, out _);
                 if (index == -1 || !hasSeparator)
                     continue;
 
@@ -84,9 +85,9 @@ namespace Qmmands
             }
         }
 
-        private int GetSegment(string text, string key, int startIndex, bool checkForSeparator, out string arguments, out bool hasSeparator, out bool hasWhitespaceSeparator)
+        private int GetSegment(ReadOnlySpan<char> text, string key, int startIndex, bool checkForSeparator, out string arguments, out bool hasSeparator, out bool hasWhitespaceSeparator)
         {
-            var index = text.IndexOf(key, startIndex, _service.StringComparison);
+            var index = text.Slice(startIndex).IndexOf(key.AsSpan()) + startIndex;
             if (index == -1 || index != startIndex)
             {
                 arguments = null;
@@ -111,7 +112,7 @@ namespace Qmmands
                         index++;
                     }
 
-                    if (text.IndexOf(_service.Separator, index, _service.StringComparison) == index)
+                    if (text.Slice(index).IndexOf(_service.Separator.AsSpan()) == index)
                     {
                         index += _service.Separator.Length;
                         hasConfigSeparator = true;
@@ -128,7 +129,13 @@ namespace Qmmands
                     index++;
                 }
 
-                arguments = text.Substring(index);
+                var length = text.Length - index;
+                var pool = ArrayPool<char>.Shared;
+                var temp = pool.Rent(length);
+                var buffer = temp.AsSpan();
+                text.Slice(index).CopyTo(buffer);
+                arguments = new string(temp, 0, length);
+                pool.Return(temp);
                 switch (_service.SeparatorRequirement)
                 {
                     case SeparatorRequirement.None:
