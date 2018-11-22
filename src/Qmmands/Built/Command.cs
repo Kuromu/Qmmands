@@ -98,7 +98,7 @@ namespace Qmmands
             Callback = builder.Callback;
             for (var i = 0; i < builder.Cooldowns.Count; i++)
                 builder.Cooldowns[i].Command = this;
-            Cooldowns = builder.Cooldowns;
+            Cooldowns = builder.Cooldowns.ToImmutableArray();
             Aliases = builder.Aliases.ToImmutableArray();
 
             var fullAliases = ImmutableArray.CreateBuilder<string>();
