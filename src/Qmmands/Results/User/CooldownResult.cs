@@ -18,7 +18,7 @@ namespace Qmmands
         public TimeSpan RetryAfter { get; }
 
         /// <inheritdoc />
-        public bool IsSuccessful => RetryAfter > TimeSpan.Zero;
+        public bool IsSuccessful => RetryAfter <= TimeSpan.Zero;
 
         /// <summary>
         ///     Gets the <see langword="enum"/> bucket type for this cooldown.

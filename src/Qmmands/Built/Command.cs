@@ -179,6 +179,7 @@ namespace Qmmands
             var ratelimited = new List<CooldownResult>();
             foreach (var cooldown in Cooldowns)
             {
+                cooldown.Command = this;
                 var result = await cooldown.GetCooldownAsync(context, provider).ConfigureAwait(false);
                 if (!result.IsSuccessful)
                     ratelimited.Add(result);

@@ -9,7 +9,15 @@ namespace Qmmands
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public abstract class CooldownAttribute : Attribute
     {
+        /// <summary>
+        ///     Gets the <see langword="enum"/> bucket type for this cooldown.
+        /// </summary>
         public virtual object BucketType { get; }
+
+        /// <summary>
+        ///     Gets the <see cref="Qmmands.Command"/> that's being checked for cooldowns.
+        /// </summary>
+        public Command Command { get; internal set; }
 
         /// <summary>
         ///     Determines whether the <see cref="Command"/> is on cooldown.
@@ -17,7 +25,7 @@ namespace Qmmands
         /// <param name="context"> The <see cref="ICommandContext"/> used during execution. </param>
         /// <param name="provider"> The <see cref="IServiceProvider"/> used during execution. </param>
         /// <returns></returns>
-        public abstract Task<CooldownResult> GetCooldownAsync(ICommandContext context, IServiceProvider provider);
+        public abstract Task<CooldownResult> GetCooldownsAsync(ICommandContext context, IServiceProvider provider);
 
         /// <summary>
         ///     Creates a <see cref="CooldownAttribute"/> with a specified cooldown bucket <see langword="enum"/>.
