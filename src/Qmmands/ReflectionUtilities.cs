@@ -135,7 +135,7 @@ namespace Qmmands
                         break;
 
                     case CooldownAttribute cooldownAttribute:
-                        builder.AddCooldown(new Cooldown(cooldownAttribute.Amount, cooldownAttribute.Per, cooldownAttribute.BucketType));
+                        builder.AddCooldown(cooldownAttribute);
                         break;
 
                     case IgnoreExtraArgumentsAttribute ignoreExtraArgumentsAttribute:

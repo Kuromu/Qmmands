@@ -57,9 +57,9 @@ namespace Qmmands
         public CommandCallbackDelegate Callback { get; set; }
 
         /// <summary>
-        ///     Gets the <see cref="Cooldown"/>s of the <see cref="Command"/>.
+        ///     Gets the <see cref="CooldownAttribute"/>s of the <see cref="Command"/>.
         /// </summary>
-        public List<Cooldown> Cooldowns { get; }
+        public List<CooldownAttribute> Cooldowns { get; }
 
         /// <summary>
         ///     Gets the aliases of the <see cref="Command"/>.
@@ -86,7 +86,7 @@ namespace Qmmands
         /// </summary>
         public CommandBuilder()
         {
-            Cooldowns = new List<Cooldown>();
+            Cooldowns = new List<CooldownAttribute>();
             Aliases = new List<string>();
             Checks = new List<CheckBaseAttribute>();
             Attributes = new List<Attribute>();
@@ -157,9 +157,9 @@ namespace Qmmands
         }
 
         /// <summary>
-        ///     Adds a <see cref="Cooldown"/> to <see cref="Cooldowns"/>.
+        ///     Adds a <see cref="CooldownAttribute"/> to <see cref="Cooldowns"/>.
         /// </summary>
-        public CommandBuilder AddCooldown(Cooldown cooldown)
+        public CommandBuilder AddCooldown(CooldownAttribute cooldown)
         {
             Cooldowns.Add(cooldown);
             return this;
@@ -168,7 +168,7 @@ namespace Qmmands
         /// <summary>
         ///     Adds <see cref="Cooldown"/>s to <see cref="Cooldowns"/>.
         /// </summary>
-        public CommandBuilder AddCooldowns(params Cooldown[] cooldowns)
+        public CommandBuilder AddCooldowns(params CooldownAttribute[] cooldowns)
         {
             Cooldowns.AddRange(cooldowns);
             return this;
