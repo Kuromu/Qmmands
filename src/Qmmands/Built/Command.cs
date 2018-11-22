@@ -96,6 +96,8 @@ namespace Qmmands
             RunMode = builder.RunMode ?? module.RunMode;
             IgnoreExtraArguments = builder.IgnoreExtraArguments ?? module.IgnoreExtraArguments;
             Callback = builder.Callback;
+            for (var i = 0; i < builder.Cooldowns.Count; i++)
+                builder.Cooldowns[i].Command = this;
             Cooldowns = builder.Cooldowns;
             Aliases = builder.Aliases.ToImmutableArray();
 
@@ -179,7 +181,6 @@ namespace Qmmands
             var ratelimited = new List<CooldownResult>();
             foreach (var cooldown in Cooldowns)
             {
-                cooldown.Command = this;
                 var result = await cooldown.GetCooldownAsync(context, provider).ConfigureAwait(false);
                 if (!result.IsSuccessful)
                     ratelimited.Add(result);
